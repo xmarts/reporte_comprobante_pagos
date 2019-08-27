@@ -1,6 +1,7 @@
 <odoo>
-	 <template id="id_reporte_pagos" inherit_id="account.report_payment_receipt_document">
+     <template id="id_reporte_pagos" inherit_id="account.report_payment_receipt_document">
          <xpath expr="//div[1]" position="after">
+           <t t-if="docs.l10n_mx_edi_factoring_id">  
             <h4 class="text-center" style="margin-top:2em; margin-bottom:1em; text-decoration:underline;"> Documentos Relacionados </h4>
             <table class="table table-sm o_main_table">
                <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
@@ -21,48 +22,30 @@
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
-                    <t t-foreach="tfd.Pago" t-as="rec">
-                        <tr>
-                            <t t-set="pagval" t-value="0" />
-                            <t t-if="rec.DoctoRelacionado.get('MetodoDePagoDR') == 'PUE'">
+                    <tr t-foreach="docs_related" t-as="inv">
+                        <t t-set="pagval" t-value="0" />
+                            <t t-if="inv.get('MetodoDePagoDR') == 'PUE'">
                                 <t t-set="pagval" t-value="'PUE - Pago en una sola exibicion'" />
                             </t>
-                            <t t-if="rec.DoctoRelacionado.get('MetodoDePagoDR') == 'PPD'">
+                            <t t-if="inv.get('MetodoDePagoDR') == 'PPD'">
                                 <t t-set="pagval" t-value="'PPD - Pago en parcialidades o diferido'" />
                             </t>
-                            <td>
-                                <span t-esc="rec.DoctoRelacionado.get('IdDocumento')" />
-                            </td>
-                            <td>
-                                <t t-set="ser" t-value="rec.DoctoRelacionado.get('Serie')" />
-                                <t t-set="fol" t-value="rec.DoctoRelacionado.get('Folio')" />
-                                <span t-esc="str(ser)+str(000)+str(fol)" />
-                            </td>
-                            <td>
-                                <span t-esc="rec.DoctoRelacionado.get('MonedaDR')" />
-                            </td>
-                            <td>
-                                
-                            </td>
-                            <td>
-                                <span t-esc="rec.DoctoRelacionado.get('NumParcialidad')" />
-                            </td>
-                            <td>
-                                <span t-esc="pagval" />
-                            </td>
-                            <td>
-                                <span t-esc="rec.DoctoRelacionado.get('ImpSaldoAnt')" />
-                            </td>
-                            <td>
-                                <span t-esc="rec.DoctoRelacionado.get('ImpPagado')" />
-                            </td>
-                            <td>
-                                <span t-esc="rec.DoctoRelacionado.get('ImpSaldoInsoluto')" />
-                            </td>
-                        </tr> 
-                    </t>
+
+                            <td><span t-esc="inv.get('IdDocumento')"/></td>
+                            <td><span t-esc="o.invoice_ids.filtered(lambda i: i.l10n_mx_edi_cfdi_uuid == inv.get('IdDocumento')).number or ''"/></td>
+                            <td><span t-esc="inv.get('MonedaDR')"/></td>
+                            <td></td>
+                            <td class="text-right"><span t-esc="inv.get('NumParcialidad', '')"/></td>
+                            <td class="text-right"><span t-esc="pagval" /> </td>
+                            <td class="text-right"><span t-esc="inv.get('ImpSaldoAnt', '')"/></td>
+                            <td class="text-right"><span t-esc="inv.get('ImpPagado', '')"/></td>
+                            <td class="text-right"><span t-esc="inv.get('ImpSaldoInsoluto', '')"/></td>
+                            
+                        </tr>
+ 
                 </tbody>
             </table>
+        </t>
          </xpath>
        </template> 
 </odoo>
