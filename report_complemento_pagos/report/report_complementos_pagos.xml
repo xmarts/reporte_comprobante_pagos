@@ -15,13 +15,15 @@
                     </thead>
                     <tbody>
                         <tr t-foreach="docs_related" t-as="inv">
-                            <td><span t-esc="o.invoice_ids.filtered(lambda i: i.l10n_mx_edi_cfdi_uuid == inv.get('IdDocumento')).number or ''"/></td>
-                            <td><span t-esc="inv.get('IdDocumento')"/></td>
-                            <td class="text-right">1</td>
-                            <td class="text-right"><span t-esc="inv.get('ImpSaldoAnt', '')"/></td>
-                            <td class="text-right"><span t-esc="inv.get('ImpPagado', '')"/></td>
-                            <td class="text-right"><span t-esc="inv.get('ImpSaldoInsoluto', '')"/></td>
-                            <td><span t-esc="inv.get('MonedaDR')"/></td>
+                            <t t-if="inv.get('ImpSaldoAnt') != inv.get('ImpPagado') ">
+                                <td><span t-esc="o.invoice_ids.filtered(lambda i: i.l10n_mx_edi_cfdi_uuid == inv.get('IdDocumento')).number or ''"/></td>
+                                <td><span t-esc="inv.get('IdDocumento')"/></td>
+                                <td class="text-right">1</td>
+                                <td class="text-right"><span t-esc="inv.get('ImpSaldoAnt', '')"/></td>
+                                <td class="text-right"><span t-esc="inv.get('ImpPagado', '')"/></td>
+                                <td class="text-right"><span t-esc="inv.get('ImpSaldoInsoluto', '')"/></td>
+                                <td><span t-esc="inv.get('MonedaDR')"/></td>
+                            </t>    
                         </tr>
                     </tbody>
                 </table>
