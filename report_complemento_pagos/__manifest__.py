@@ -3,8 +3,7 @@
     'name': "report_complemento_pagos",
 
     'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
+        Reporte complemento de Pago""",
 
     'description': """
         Long description of module's purpose
@@ -20,11 +19,11 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','account'],
+    'depends': ['base','account','l10n_mx_edi'],
 
     # always loaded
     'data': [
-        # 'security/ir.model.access.csv',
+        'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
         'report/report_complementos_pagos.xml',

@@ -1,41 +1,321 @@
+<?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-     <template id="id_reporte_pagos" inherit_id="l10n_mx_edi.report_payment_document_mx">
-        <xpath expr="//table[hasclass('table-sm')][2]" position="replace">
-            <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th>Invoice</th>
-                            <th>UUID</th>
-                            <th class="text-right">Partiality</th>
-                            <th class="text-right">Previous balance</th>
-                            <th class="text-right">Amount Paid</th>
-                            <th class="text-right">Balance</th>
-                            <th>Currency</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr t-foreach="docs_related" t-as="inv">
-                            <t t-if="inv.get('ImpSaldoAnt') != inv.get('ImpPagado') ">
-                                <td><span t-esc="o.invoice_ids.filtered(lambda i: i.l10n_mx_edi_cfdi_uuid == inv.get('IdDocumento')).number or ''"/></td>
-                                <td><span t-esc="inv.get('IdDocumento')"/></td>
-                                <td class="text-right">1</td>
-                                <td class="text-right"><span t-esc="inv.get('ImpSaldoAnt', '')"/></td>
-                                <td class="text-right"><span t-esc="inv.get('ImpPagado', '')"/></td>
-                                <td class="text-right"><span t-esc="inv.get('ImpSaldoInsoluto', '')"/></td>
-                                <td><span t-esc="inv.get('MonedaDR')"/></td>
-                            </t>    
-                        </tr>
-                    </tbody>
-                </table>
-        </xpath>
-        
-         <xpath expr="//table[hasclass('table-sm')][2]" position="after">
-           <t t-if="docs.l10n_mx_edi_factoring_id">  
-            <h4 class="text-center" style="margin-top:2em; margin-bottom:1em; text-decoration:underline;"> Documentos Relacionados </h4>
-            <table class="table table-sm o_main_table">
-               <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
+  <data>
+
+     <template id="report_account_documents" inherit_id="account.report_payment_receipt_document">
+           <xpath expr="//t[@t-call='web.external_layout']" position="replace">
+            <t t-call="web.html_container">
+            <t t-call="web.basic_layout">              
+            <t t-foreach="docs" t-as="o">
+                 <div class="page">
+               
+                    
+                   
+                 
+              
+              <table width="100%" style="border:0;">
+                <tr>
+                 <td><img t-attf-src="data:image/*;base64,{{o.company_id.logo}}"/></td>
+                 <td>
+                      <span t-esc="o.company_id.name"/><br/>
+                      <span t-esc="o.company_id.vat"/><br/>
+                        <t t-foreach="o.company_id" t-as="com">
+                         <span t-esc="com.street"/><br/>
+                         <span t-esc="com.street2"/><br/>
+                         <span t-if="o.company_id.phone">C.P.: <span t-field="o.company_id.phone"/></span>,
+                         <span t-esc="com.city"/>,
+                           <t t-foreach="com.state_id" t-as="st">
+                            <span t-esc="st.name"/><br/>
+                           </t>
+                          
+                    
+                    </t><br/></td>
+                 <td><span>Tipo Comprobante:P-Pago</span></td> 
+                </tr>
+              </table>
+                 
+             
+                <table width="100%" style="border:1px solid black;">
+                   
+                   
+                    <tr style="background:write;">
+                      <td width="100%" height="1px;"></td>
+
+                    </tr>
+                
+                  </table>
+                <t t-set="xml" t-value="o.l10n_mx_edi_get_xml_etree()"/>
+                <t t-set="tfd" t-value="o.l10n_mx_edi_get_tfd_etree(xml)"/>
+                <t t-set="tfd_original_string" t-value="o._get_l10n_mx_edi_cadena()"/>
+                <t t-set="namem" t-value="xml.Emisor.get('Nombre')" />
+                <t t-set="Regimenf" t-value="xml.Emisor.get('RegimenFiscal')" />
+                <t t-set="Emisorrfc" t-value="xml.Emisor.get('Rfc')" />
+                <t t-set="namrec" t-value="xml.Receptor.get('Nombre')" />
+                <t t-set="Receptorrfc" t-value="xml.Receptor.get('Rfc')" />
+                 <table width="100%" style="border:0;">
+                  
+                     <tr >
+                      <td width="20%" ><strong>Cliente</strong></td>
+                      <td width="80%" ><span t-esc="o.partner_id.name"/></td>
+                    </tr>
+                    <tr >
+                      <td width="20%" ><strong>Direccion</strong></td>
+                      <td width="80%" ><t t-foreach="o.partner_id" t-as="com">
+                         <span t-esc="com.street"/>
+                         <span t-esc="com.street_number"/></t></td>
+                    </tr>
+                    <tr >
+                      <td width="20%" ><strong>RFC</strong></td>
+                      <td width="80%" ><span t-esc="o.partner_id.vat"/></td>
+                    </tr>                    
+                    <tr >
+                      <td width="20%" ><strong>Residencia Fiscal</strong></td>
+                      <td width="80%" ></td>
+                    </tr>
+                    <tr >
+                      <td width="20%" ><strong>No Registro Tributario</strong></td>
+                      <td width="80%" ></td>
+                    </tr>
+                   
+
+                  </table>
+
+                <table width="100%" style="border:1px solid black; font-size:12px;">
+                   
+                   
+                    <tr style="background:write;">
+                      <td width="100%" height="1px;"></td>
+
+                    </tr>
+                
+                  </table>
+                  <table width="100%" style="border:0;">
+                    <tr>
+                     <td width="10%">Uso CFDI</td>
+                     <td width="35%"><span t-esc="o.partner_id.l10n_mx_edi_usage"/></td>
+                    
+                     <td width="20%">Certificado</td>
+                     <td width="35%"><span t-esc="xml.get('noCertificado', xml.get('NoCertificado'))"/></td>
+
+                    </tr>
+                    <tr>
+                     <td width="10%">Folio</td>
+                     <td width="35%"><span t-esc="xml.get('Folio')"/></td>
+                    
+                     <td width="20%">Folio Fiscal UUID</td>
+                     <td width="35%"><span t-esc="tfd.get('UUID')"/></td>
+
+                    </tr>
+                    <tr>
+                     <td width="10%">Serie</td>
+                     <td width="35%"> <span t-esc="xml.get('Serie')"/></td>
+                    
+                     <td width="20%">No. Serie Certificado SAT</td>
+                     <td width="35%"><span t-esc="tfd.get('NoCertificadoSAT')"/></td>
+
+                    </tr>
+                    <tr>
+                     <td width="10%">Lugar Expedicion</td>
+                     <td width="35%"><span t-esc="xml.get('LugarExpedicion', 'No identificado')"/></td>
+                    
+                     <td width="20%">Fecha Hora de Certificacion</td>
+                     <td width="35%"><span t-esc="tfd.get('FechaTimbrado')"/></td>
+
+                    </tr>
+                     <tr>
+                     <td width="20%">Fecha y Hora de Envio</td>
+                     <td width="30%"></td>
+                    
+                     <td width="20%">RFC Proveedor de Certificacion</td>
+                     <td width="30%">   <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('ClaveProdServ')" />
+                    </t></td>
+
+                    </tr>
+                  </table>
+
+                     <table width="100%" style="border:1px solid black;">
+                   
+                   
+                    <tr style="background:write;">
+                      <td width="100%" height="1px;"></td>
+
+                    </tr>
+                
+                  </table>
+                   <div  style="font-family:Times New Roman;" name="inf_pago" class="row mt32 mb32">
+                  
+                <div class="col-3 bm-2">
+                    <strong >Clave Prod</strong>
+                    <br/>
+                    <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('ClaveProdServ')" />
+                    </t>
+                </div>
+                 <div  class="col-2 bm-2">
+                    <strong>Cantidad</strong>
+                    <br/>
+                    <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('Cantidad')" />
+                    </t>
+                </div>
+                 <div  class="col-2 bm-2">
+                    <strong>Clave Unidad</strong>
+                      <br/>
+                    <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('ClaveUnidad')" />
+                    </t>
+                </div>
+                 <div  class="col-2 bm-2">
+                    <strong>Descripción</strong>
+                      <br/>
+                    <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('Descripcion')" />
+                    </t>
+                </div>
+                   <div  class="col-2 bm-2">
+                    <strong>Valor Unitario</strong>                    
+                      <br/>
+                    <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('ValorUnitario')" />
+                    </t>
+                </div>
+                 <div  class="col-2 bm-2">
+                    <strong>Importe</strong>
+                    <br/>
+                    <t t-foreach="xml.Conceptos" t-as="con">
+                      <span t-esc="con.Concepto.get('Importe')" />
+                    </t>
+                </div>
+            </div>                
+           
+         
+                              <t t-if="o.l10n_mx_edi_cfdi_uuid">
+                <div class="row" style="font-size:12px;" id="complement">
+                      
+                       <div class="barcode col-6">
+                        <t t-set="sello" t-value="xml.get('Sello', 'No identificado')[-8:]"/>
+                        <img alt="Barcode" style="height:250px; width:250px;" t-att-src="'/report/barcode/?type=QR&amp;value=%s' % quote_plus(                             'https://verificacfdi.facturaelectronica.sat.gob.mx/default.aspx?' + keep_query(                                 re=o.l10n_mx_edi_cfdi_supplier_rfc, rr=o.l10n_mx_edi_cfdi_customer_rfc,                                 tt=0, id=o.l10n_mx_edi_cfdi_uuid)                                 + '&amp;fe=%s' % quote_plus(sello, 'utf-8', 'strict', '=/').replace('%2B', '+'))"/>
+                    </div>
+                    <div class="complement-details col-9">
+                       
+                        <div >
+                            <span>Digital stamp of the emitter</span>
+                        </div>
+                        <div class="digital-stamp-content">
+                            <span t-esc="xml.get('Sello', 'No identificado')"/>
+                        </div>
+                        <div >
+                            <span>Digital stamp SAT</span>
+                        </div>
+                        <div class="digital-stamp-content">
+                            <span t-esc="tfd.get('SelloSAT', 'No identificado')"/>
+                        </div>
+                        <div >
+                            <span>Original chain complement of digital certification SAT</span>
+                        </div>
+                        <div class="digital-stamp-content">
+                            <span class="nowrap" t-esc="tfd_original_string"/>
+                        </div>
+                        <div t-if="xml.Emisor.xpath('cfdi:ExpedidoEn', namespaces=xml.nsmap)" >
+                            <span>Issued from</span>
+                        </div>
+                        <div t-if="xml.Emisor.xpath('cfdi:ExpedidoEn', namespaces=xml.nsmap)" class="digital-stamp-content">
+                            <span t-esc="xml.get('LugarExpedicion', 'No identificado')"/>
+                        </div>
+                        <div >
+                            <span>Extra Info</span>
+                        </div>
+                        <div class="digital-stamp-content">
+                            <span>Emitter certificate:</span> <span t-esc="xml.get('NoCertificado')"/>
+                            <span> | SAT Certificate:</span> <span t-esc="tfd.get('NoCertificadoSAT')"/>
+                            <span> | Expedition place:</span> <span t-esc="xml.get('LugarExpedicion')"/>
+                            <span> | Fiscal Regime:</span><span t-esc="xml.Emisor.get('RegimenFiscal', '')"/>
+                            <span> | Emission Date:</span> <span t-esc="xml.get('Fecha', '').replace('T', ' ')"/>
+                            <span> | Certification Date:</span> <span t-esc="tfd.get('FechaTimbrado', '').replace('T', ' ')"/>
+                            <span> | Fiscal Folio:</span> <span t-esc="tfd.get('UUID')"/>
+                        </div>
+                        <div class="digital-stamp-content text-center">
+                            <strong>This document is a printed representation of a CFDI</strong>
+                        </div>
+                    </div>
+                 
+                </div>
+            </t>
+
+                 
+                 </div>
+              </t>
+              </t>
+            </t>
+           
+         </xpath>
+    </template>
+  
+
+
+     <template id="id_reporte_monto" inherit_id="account.report_payment_receipt_document">
+         <xpath expr="//div[@name='inf_pago']" position="after">
+                   <table width="100%">
+                <tr class="text-center"><td>Complemento Recepción Pagos</td></tr>
+            </table>
+                    <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
                <t t-set="comp" t-value="xml.Complemento" />
                <t t-set="tfd" t-value="docs.l10n_mx_edi_get_pago_etree(xml)" />
+                 <t t-set="lis" t-value="[]" />
+                 <t t-foreach="tfd.Pago" t-as="t">
+    <t t-set="lis" t-value="lis +  [(t.get('FechaPago'),t.get('FormaDePagoP'),t.get('MonedaP'),t.get('Monto'))]" />
+                 </t>            
+            
+                  <t t-foreach="lis" t-as="rec">               
+               <t t-if="rec[1] != '17'">
+                 <table width="100%">
+                <tr>
+                    <td>Fecha Pago</td>
+                    <td><span t-esc="rec[0]" /> </td>
+                    <td>Num. Operacion</td>
+                    <td></td>
+                    <td>TipoCadPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>Forma de Pago</td>
+                    <td><span t-esc="rec[1]" /></td>
+                    <td>RfcEmisorCtaOrd</td>
+                    <td></td>
+                    <td>CertPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>Moneda</td>
+                    <td><span t-esc="rec[2]" /></td>
+                    <td>NomBancoOrd</td>
+                    <td></td>
+                    <td>CadPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>TipoCambio</td>
+                    <td></td>
+                    <td>CtaOrdenante</td>
+                    <td></td>
+                    <td>SelloPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>Monto</td>
+                    <td><span t-esc="rec[3]" /></td>
+                    <td>RfcEmisorCtaBen</td>
+                    <td></td>
+                    <td>CtaBeneficiario</td>
+                    <td></td>
+                 </tr>
+            
+            </table>
+        </t>
+              </t>
+             <table class="table ">
+             
                <!-- <span t-field="docs.payments_widget" />-->
                 <thead>
                     <tr>
@@ -51,38 +331,188 @@
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
+                    <t t-foreach="o.complemento_ids" t-as="r">
+                    <t t-if="r.nodo == '1'">                   
 
-                    <t  t-foreach="docs_related" t-as="inv">
-                         <t t-foreach="docs.invoice_lines" t-as="a">
-                            <t t-if="a.comision_col == true and a.invoice == o.invoice_ids.filtered(lambda i: i.l10n_mx_edi_cfdi_uuid == inv.get('IdDocumento')).number">
-                                <tr>
-                                    <t t-set="pagval" t-value="0" />
-                                        <t t-if="inv.get('ImpSaldoInsoluto') == '00.0'" >
-                                            <t t-if="inv.get('MetodoDePagoDR') == 'PUE'">
-                                                <t t-set="pagval" t-value="'PUE - Pago en una sola exibicion'" />
-                                            </t>
-                                            <t t-if="inv.get('MetodoDePagoDR') == 'PPD'">
-                                                <t t-set="pagval" t-value="'PPD - Pago en parcialidades o diferido'" />
-                                            </t>
+                        <tr>                        
+                          <td>
+                                <t t-esc="r.id_documento" />
+                               
+                            </td>
+                            <td>
+                                <t t-esc="r.serie" />
+                            </td>
+                            <td>
+                                <span t-esc="r.modena" />
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                 <span t-esc="r.parcialidad" />
+                            </td>
+                            <td>
+                                <span t-esc="r.metodo" />
+                            </td>
+                            
+                            <td>
+                                <span t-esc="r.s_anterior" />
+                            </td>
 
-                                            <td><span t-esc="inv.get('IdDocumento')"/></td>
-                                            <td><span t-esc="o.invoice_ids.filtered(lambda i: i.l10n_mx_edi_cfdi_uuid == inv.get('IdDocumento')).number or ''"/></td>
-                                            <td><span t-esc="inv.get('MonedaDR')"/></td>
-                                            <td></td>
-                                            <td class="text-right">2</td>
-                                            <td class="text-right"><span t-esc="pagval" /> </td>
-                                            <td class="text-right"><span t-esc="inv.get('ImpSaldoAnt', '')"/></td>
-                                            <td class="text-right"><span t-esc="inv.get('ImpPagado', '')"/></td>
-                                            <td class="text-right"><span t-esc="inv.get('ImpSaldoInsoluto', '')"/></td>
+                            <td>
+                                <span t-esc="r.s_pagado" />
+                            </td>
 
-                                        </t>
-                                </tr>
-                            </t>
-                        </t>    
+                            <td>
+                                <span t-esc="r.s_insoluto" />
+                            </td>
+
+                        </tr> 
                     </t>
+                    </t>
+             
                 </tbody>
+             </table>
+            <t t-set="n_dos" t-value="0" />
+             <t t-foreach="o.complemento_ids" t-as="x">
+                  <t t-if="x.nodo == '2'">
+                   <t t-set="n_dos" t-value="n_dos + 1">                  
+                  </t>
+             </t>
+         </t>
+
+               <t t-if="n_dos > 0">
+                               <table width="100%">
+                <tr class="text-center"><td>Complemento Recepcion Pagos</td></tr>
+            </table>
+                    <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
+               <t t-set="comp" t-value="xml.Complemento" />
+               <t t-set="tfd" t-value="docs.l10n_mx_edi_get_pago_etree(xml)" />
+                 <t t-set="lis" t-value="[]" />
+                 <t t-foreach="tfd.Pago" t-as="t">
+    <t t-set="lis" t-value="lis +  [(t.get('FechaPago'),t.get('FormaDePagoP'),t.get('MonedaP'),t.get('Monto'))]" />
+                 </t>            
+            
+                  <t t-foreach="lis" t-as="rec">               
+              <t t-if="rec[1] == '17'">
+                 <table width="100%">
+                <tr>
+                    <td>Fecha Pago</td>
+                    <td><span t-esc="rec[0]" /> </td>
+                     <td>Moneda</td>
+                    <td><span t-esc="rec[2]" /></td>
+                  
+                 </tr>
+                   <tr>
+                    <td>Forma de Pago</td>
+                    <td><span t-esc="rec[1]" /></td>
+                    <td>TipoCambio</td>
+                    <td></td>
+                 
+                 </tr>
+                   <tr>
+                    <td>Num. Operacion</td>
+                    <td></td>
+                   
+                    <td>Monto</td>
+                    <td><span t-esc="rec[3]" /></td>
+                  
+                 </tr>
+                  
+            
             </table>
         </t>
-        </xpath>
-       </template> 
+              </t>
+             <table class="table ">
+             
+               <!-- <span t-field="docs.payments_widget" />-->
+                <thead>
+                    <tr>
+                        <th>Id Documento</th>
+                        <th>Serie</th>
+                        <th>Moneda</th>
+                        <th>Tipo Cambio</th>
+                        <th>Parcialidad</th>
+                        <th>Metodo de Pago</th>
+                        <th>Saldo Anterior</th>
+                        <th>Saldo Pagado</th>
+                        <th>Saldo Insoluto</th>
+                    </tr>
+                </thead>
+                <tbody class="sale_tbody">
+                    <t t-foreach="o.complemento_ids" t-as="r">
+                    <t t-if="r.nodo == '2'">                   
+
+                        <tr>                        
+                          <td>
+                                <t t-esc="r.id_documento" />
+                               
+                            </td>
+                            <td>
+                                <t t-esc="r.serie" />
+                            </td>
+                            <td>
+                                <span t-esc="r.modena" />
+                            </td>
+                            <td>
+                                
+                            </td>
+                            <td>
+                                 <span t-esc="r.parcialidad" />
+                            </td>
+                            <td>
+                                <span t-esc="r.metodo" />
+                            </td>
+                            
+                            <td>
+                                <span t-esc="r.s_anterior" />
+                            </td>
+
+                            <td>
+                                <span t-esc="r.s_pagado" />
+                            </td>
+
+                            <td>
+                                <span t-esc="r.s_insoluto" />
+                            </td>
+
+                        </tr> 
+                    </t>
+                    </t>
+             
+                </tbody>
+             </table>
+
+               </t>
+
+                
+     </xpath> 
+    </template>
+
+     <record id="paperformat_report_receipt" model="report.paperformat"> 
+            <field name="name">No header</field>
+            <field name="default" eval="True"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">40</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+    </record>
+
+        <report
+            id="account.action_report_payment_receipt"
+            model="account.payment"
+            string="Payment Receipt"
+            report_type="qweb-pdf"
+            name="account.report_payment_receipt"
+            file="account.report_payment_receipt"
+            menu="True"
+            paperformat="report_complemento_pagos.paperformat_report_receipt"
+        />
+    </data>
+
 </odoo>
