@@ -93,6 +93,7 @@ class pagos_pagos(models.Model):
 
     @api.multi
     def complemento(self):
+        self.complemento_ids = [(5, 0, 0)]
         data = base64.decodestring(self.l10n_mx_edi_cfdi)
         root =ElementTree.fromstring(data)
         print ("roooooooooooooooooooooooooooot",root)
