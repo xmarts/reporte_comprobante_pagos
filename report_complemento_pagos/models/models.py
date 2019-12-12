@@ -53,7 +53,9 @@ class pagos_pagos(models.Model):
         'account_id',
         string='Complento',
     )
-
+    carga_lineas = fields.Integer(
+        string='Cargar lineas', default=False,
+    )
     @api.model
     def l10n_mx_edi_get_pago_etree(self, cfdi):
         if not hasattr(cfdi, 'Complemento'):
@@ -89,7 +91,12 @@ class pagos_pagos(models.Model):
             certificate = tree.get('noCertificado', tree.get('NoCertificado'))
             rec.l10n_mx_edi_cfdi_certificate_id = self.env['l10n_mx_edi.certificate'].sudo().search(
                 [('serial_number', '=', certificate)], limit=1)
-        self.complemento()
+            
+            if rec.carga_lineas == 0:
+                rec.complemento()
+                rec.write({'carga_lineas':1})
+
+            
 
     @api.multi
     def complemento(self):
@@ -97,42 +104,45 @@ class pagos_pagos(models.Model):
         data = base64.decodestring(self.l10n_mx_edi_cfdi)
         root =ElementTree.fromstring(data)
         print ("roooooooooooooooooooooooooooot",root)
-        for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):         
-            for pagos in child:
-                for pago in pagos:
-                    for doc in pago:
-                        fpp = pago.get('FormaDePagoP')
-                        if fpp:
-                            if pago.attrib['FormaDePagoP'] == '17':
-                                self.complemento_ids.create({
-                                'nodo': 2,
-                                'id_documento':doc.attrib['IdDocumento'],
-                                'serie':doc.attrib['Serie'],
-                                'folio':doc.attrib['Folio'],
-                                'modena': doc.attrib['MonedaDR'],
-                                'parcialidad':doc.attrib['NumParcialidad'],
-                                'metodo':doc.attrib['MetodoDePagoDR'],
-                                's_anterior':doc.attrib['ImpSaldoAnt'],
-                                's_pagado':doc.attrib['ImpPagado'],
-                                's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                'account_id':self.id
-                                })
+        count = 0
+        if count == 0:
+            count += count + 1
+            for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):         
+                for pagos in child:
+                    for pago in pagos:
+                        for doc in pago:
+                            fpp = pago.get('FormaDePagoP')
+                            if fpp:
+                                if pago.attrib['FormaDePagoP'] == '17':
+                                    self.complemento_ids.create({
+                                    'nodo': 2,
+                                    'id_documento':doc.attrib['IdDocumento'],
+                                    'serie':doc.attrib['Serie'],
+                                    'folio':doc.attrib['Folio'],
+                                    'modena': doc.attrib['MonedaDR'],
+                                    'parcialidad':doc.attrib['NumParcialidad'],
+                                    'metodo':doc.attrib['MetodoDePagoDR'],
+                                    's_anterior':doc.attrib['ImpSaldoAnt'],
+                                    's_pagado':doc.attrib['ImpPagado'],
+                                    's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                    'account_id':self.id
+                                    })
+                                       
+                                else:
+                                    self.complemento_ids.create({
+                                    'nodo': 1,
+                                    'id_documento':doc.attrib['IdDocumento'],
+                                    'serie':doc.attrib['Serie'],
+                                    'folio':doc.attrib['Folio'],
+                                    'modena': doc.attrib['MonedaDR'],
+                                    'parcialidad':doc.attrib['NumParcialidad'],
+                                    'metodo':doc.attrib['MetodoDePagoDR'],
+                                    's_anterior':doc.attrib['ImpSaldoAnt'],
+                                    's_pagado':doc.attrib['ImpPagado'],
+                                    's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                    'account_id':self.id
+                                    })
+                                       
                                    
                             else:
-                                self.complemento_ids.create({
-                                'nodo': 1,
-                                'id_documento':doc.attrib['IdDocumento'],
-                                'serie':doc.attrib['Serie'],
-                                'folio':doc.attrib['Folio'],
-                                'modena': doc.attrib['MonedaDR'],
-                                'parcialidad':doc.attrib['NumParcialidad'],
-                                'metodo':doc.attrib['MetodoDePagoDR'],
-                                's_anterior':doc.attrib['ImpSaldoAnt'],
-                                's_pagado':doc.attrib['ImpPagado'],
-                                's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                'account_id':self.id
-                                })
-                                   
-                               
-                        else:
-                            print("pago normal")
+                                print("pago normal")

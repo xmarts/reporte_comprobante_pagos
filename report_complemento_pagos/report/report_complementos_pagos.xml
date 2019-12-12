@@ -53,7 +53,7 @@
                 <t t-set="namrec" t-value="xml.Receptor.get('Nombre')" />
                 <t t-set="Receptorrfc" t-value="xml.Receptor.get('Rfc')" />
                  <table width="100%" style="border:0;">
-                  
+                    <t t-if="o.carga_lineas == 0">
                      <tr >
                       <td width="20%" ><strong>Cliente</strong></td>
                       <td width="80%" ><span t-esc="o.partner_id.name"/></td>
@@ -67,7 +67,25 @@
                     <tr >
                       <td width="20%" ><strong>RFC</strong></td>
                       <td width="80%" ><span t-esc="o.partner_id.vat"/></td>
-                    </tr>                    
+                    </tr> 
+                </t>
+                 <t t-if="o.carga_lineas == 1">
+                     <tr >
+                      <td width="20%" ><strong>Cliente</strong></td>
+                      <td width="80%" ><span t-esc="o.l10n_mx_edi_factoring_id.name"/></td>
+                    </tr>
+                    <tr >
+                      <td width="20%" ><strong>Direccion</strong></td>
+                      <td width="80%" ><t t-foreach="o.l10n_mx_edi_factoring_id" t-as="com">
+                         <span t-esc="com.street"/>
+                         <span t-esc="com.street_number"/></t></td>
+                    </tr>
+                    <tr >
+                      <td width="20%" ><strong>RFC</strong></td>
+                      <td width="80%" ><span t-esc="o.l10n_mx_edi_factoring_id.vat"/></td>
+                    </tr> 
+                </t>
+
                     <tr >
                       <td width="20%" ><strong>Residencia Fiscal</strong></td>
                       <td width="80%" ></td>
@@ -108,7 +126,7 @@
                     </tr>
                     <tr>
                      <td width="10%">Serie</td>
-                     <td width="35%"> <span t-esc="xml.get('Serie')"/></td>
+                     <td width="35%"> <span t-esc="xml.get('Serie')"/><span t-esc="xml.get('Folio')"/></td>
                     
                      <td width="20%">No. Serie Certificado SAT</td>
                      <td width="35%"><span t-esc="tfd.get('NoCertificadoSAT')"/></td>

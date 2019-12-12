@@ -7,8 +7,9 @@
       <field name="arch" type="xml">
         <xpath expr="//group" position="after">
           <notebook invisible="1"> 
+           
             <page string="Complemento" >
-
+               <field name="carga_lineas"/>
               <field name="complemento_ids" >
                 <tree editable="bottom">
                  <field name="nodo"/>
@@ -28,9 +29,7 @@
             </page> 
           </notebook> 
         </xpath> 
-           <xpath expr="//button[@name='action_draft']" position="after"> 
-            <button string='cargar complemento' name="complemento" type="object" class="oe_highlight oe_read_only" />
-        </xpath> 
+           
       </field>
     </record>
   </data>
