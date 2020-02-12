@@ -332,20 +332,20 @@
             </table>
         </t>
               </t>
-             <table class="table ">
+             <table class="table "  width="100%">
              
                <!-- <span t-field="docs.payments_widget" />-->
                 <thead>
-                    <tr>
-                        <th>Id Documento</th>
-                        <th>Serie</th>
-                        <th>Moneda</th>
-                        <th>Tipo Cambio</th>
-                        <th>Parcialidad</th>
-                        <th>Metodo de Pago</th>
-                        <th>Saldo Anterior</th>
-                        <th>Saldo Pagado</th>
-                        <th>Saldo Insoluto</th>
+                     <tr>
+                        <th width="20%">Id Documento</th>
+                        <th width="10%">Serie</th>
+                        <th width="10%">Moneda</th>
+                        <th width="10%">Tipo Cambio</th>
+                        <th width="10%">Parcialidad</th>
+                        <th width="10%">Metodo de Pago</th>
+                        <th width="10%">Saldo Anterior</th>
+                        <th width="10%">Saldo Pagado</th>
+                        <th width="10%">Saldo Insoluto</th>
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
@@ -353,35 +353,36 @@
                     <t t-if="r.nodo == '1'">                   
 
                         <tr>                        
-                          <td>
+                          <td width="20%">
                                 <t t-esc="r.id_documento" />
                                
                             </td>
-                            <td>
+                            <td width="10%">
                                 <t t-esc="r.serie" />
+                                <t t-esc="r.folio"/>
                             </td>
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.modena" />
                             </td>
-                            <td>
+                            <td width="10%">
                                 
                             </td>
-                            <td>
+                            <td width="10%">
                                  <span t-esc="r.parcialidad" />
                             </td>
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.metodo" />
                             </td>
                             
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.s_anterior" />
                             </td>
 
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.s_pagado" />
                             </td>
 
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.s_insoluto" />
                             </td>
 
@@ -441,20 +442,20 @@
             </table>
         </t>
               </t>
-             <table class="table ">
+             <table class="table "  width="100%">
              
                <!-- <span t-field="docs.payments_widget" />-->
                 <thead>
                     <tr>
-                        <th>Id Documento</th>
-                        <th>Serie</th>
-                        <th>Moneda</th>
-                        <th>Tipo Cambio</th>
-                        <th>Parcialidad</th>
-                        <th>Metodo de Pago</th>
-                        <th>Saldo Anterior</th>
-                        <th>Saldo Pagado</th>
-                        <th>Saldo Insoluto</th>
+                        <th width="20%">Id Documento</th>
+                        <th width="10%">Serie</th>
+                        <th width="10%">Moneda</th>
+                        <th width="10%">Tipo Cambio</th>
+                        <th width="10%">Parcialidad</th>
+                        <th width="10%">Metodo de Pago</th>
+                        <th width="10%">Saldo Anterior</th>
+                        <th width="10%">Saldo Pagado</th>
+                        <th width="10%">Saldo Insoluto</th>
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
@@ -462,35 +463,36 @@
                     <t t-if="r.nodo == '2'">                   
 
                         <tr>                        
-                          <td>
+                          <td width="20%">
                                 <t t-esc="r.id_documento" />
                                
                             </td>
-                            <td>
+                            <td width="10%">
                                 <t t-esc="r.serie" />
+                                <t t-esc="r.folio"/>
                             </td>
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.modena" />
                             </td>
-                            <td>
+                            <td width="10%">
                                 
                             </td>
-                            <td>
+                            <td width="10%">
                                  <span t-esc="r.parcialidad" />
                             </td>
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.metodo" />
                             </td>
                             
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.s_anterior" />
                             </td>
 
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.s_pagado" />
                             </td>
 
-                            <td>
+                            <td width="10%">
                                 <span t-esc="r.s_insoluto" />
                             </td>
 
