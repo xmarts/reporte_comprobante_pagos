@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
-
-from odoo import models, fields, api
 import base64
-import tempfile
-import os
-from xml.etree import ElementTree
+from datetime import datetime, date
+from itertools import groupby
+import requests
+
+from lxml import etree
+from lxml.objectify import fromstring
+from suds.client import Client
+from odoo import _, api, fields, models
+from odoo.tools import DEFAULT_SERVER_TIME_FORMAT
+from odoo.tools.float_utils import float_compare
+from odoo.tools.misc import html_escape
+from odoo.exceptions import UserError, ValidationError
 
 class Complemento(models.Model):
     _name = 'complemento'
@@ -146,3 +153,32 @@ class pagos_pagos(models.Model):
                                    
                             else:
                                 print("pago normal")
+
+
+
+class pagos_pagos(models.Model):
+    _inherit = 'account.invoice'
+    tipo_relacion = fields.Char(
+        string='Tipo relacion',
+    )
+    uuid = fields.Char(
+        string='UUID',
+    )
+    @api.multi
+    def get_cfdi(self):
+        print("sssssss")
+        """To node CfdiRelacionados get documents related with each invoice
+        from l10n_mx_edi_origin, hope the next structure:
+            relation type|UUIDs separated by ,"""
+        self.ensure_one()
+        for rec in self:
+            
+            if rec.l10n_mx_edi_origin:
+               
+                origin = rec.l10n_mx_edi_origin.split('|')
+                uuids = origin[1].split(',') if len(origin) > 1 else []
+                print("ttttttttttttttttttttttt",origin[0])
+                rec.write({'tipo_relacion':origin[0]})
+                for u in uuids:
+                    rec.write({'uuid':u})
+                

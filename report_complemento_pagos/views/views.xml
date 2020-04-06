@@ -32,5 +32,20 @@
            
       </field>
     </record>
+      <record id="id_accounts" model="ir.ui.view">
+      <field name="name">account.invoice.complemento</field>
+      <field name="model">account.invoice</field>
+      <field name="inherit_id" ref="account.invoice_form"/>
+      <field name="arch" type="xml">
+        
+        <xpath expr="//field[@name='partner_id']" position="after">
+          <field name="tipo_relacion" invisible="1"/>
+          <field name="uuid" invisible="1"/>
+          
+         
+        </xpath> 
+           
+      </field>
+    </record>
   </data>
 </odoo>
