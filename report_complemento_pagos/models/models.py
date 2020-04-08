@@ -3,6 +3,7 @@ import base64
 from datetime import datetime, date
 from itertools import groupby
 import requests
+from xml.etree import ElementTree
 
 from lxml import etree
 from lxml.objectify import fromstring
