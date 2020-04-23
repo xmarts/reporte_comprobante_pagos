@@ -100,7 +100,7 @@ class pagos_pagos(models.Model):
             rec.l10n_mx_edi_cfdi_certificate_id = self.env['l10n_mx_edi.certificate'].sudo().search(
                 [('serial_number', '=', certificate)], limit=1)
             
-            if rec.carga_lineas == 0:
+            if rec.carga_lineas == 0 and rec.l10n_mx_edi_pac_status == 'Firmado':
                 rec.complemento()
                 rec.write({'carga_lineas':1})
 
