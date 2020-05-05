@@ -100,18 +100,14 @@ class pagos_pagos(models.Model):
             rec.l10n_mx_edi_cfdi_certificate_id = self.env['l10n_mx_edi.certificate'].sudo().search(
                 [('serial_number', '=', certificate)], limit=1)
             
-            if rec.carga_lineas == 0:
-                rec.complemento()
-                rec.write({'carga_lineas':1})
 
-            
 
-    @api.multi
+    @api.model
     def complemento(self):
-        self.complemento_ids = [(5, 0, 0)]
+        #self.complemento_ids = [(5, 0, 0)]
         data = base64.decodestring(self.l10n_mx_edi_cfdi)
         root =ElementTree.fromstring(data)
-        print ("roooooooooooooooooooooooooooot",root)
+        r1=[]
         if root:
             count = 0
             if count == 0:
@@ -123,7 +119,7 @@ class pagos_pagos(models.Model):
                                 fpp = pago.get('FormaDePagoP')
                                 if fpp:
                                     if pago.attrib['FormaDePagoP'] == '17':
-                                        self.complemento_ids.create({
+                                        values = {
                                         'nodo': 2,
                                         'id_documento':doc.attrib['IdDocumento'],
                                         'serie':doc.attrib['Serie'],
@@ -135,10 +131,12 @@ class pagos_pagos(models.Model):
                                         's_pagado':doc.attrib['ImpPagado'],
                                         's_insoluto':doc.attrib['ImpSaldoInsoluto'],
                                         'account_id':self.id
-                                        })
+                                        }
+                                        r1.append(values)
+
                                            
                                     else:
-                                        self.complemento_ids.create({
+                                        values = {
                                         'nodo': 1,
                                         'id_documento':doc.attrib['IdDocumento'],
                                         'serie':doc.attrib['Serie'],
@@ -150,11 +148,15 @@ class pagos_pagos(models.Model):
                                         's_pagado':doc.attrib['ImpPagado'],
                                         's_insoluto':doc.attrib['ImpSaldoInsoluto'],
                                         'account_id':self.id
-                                        })
+                                        }
+                                        r1.append(values)
+
                                            
                                        
                                 else:
                                     print("pago normal")
+                print("sssssss",r1)
+                return r1
 
 
 

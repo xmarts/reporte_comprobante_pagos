@@ -348,47 +348,50 @@
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
-                    <t t-foreach="o.complemento_ids" t-as="r">
-                    <t t-if="r.nodo == '1'">                   
+                   <t t-set="comp1" t-value="o.complemento()"/>
+                    <t t-foreach="comp1" t-as="r">
+                    <t t-if="r['nodo'] == 1"> 
 
                         <tr>                        
                           <td width="20%">
-                                <t t-esc="r.id_documento" />
+                                <t t-esc="r['id_documento']"/>
                                
                             </td>
                             <td width="10%">
-                                <t t-esc="r.serie" />
-                                <t t-esc="r.folio"/>
+                                <t t-esc="r['serie']"/>
+                                <t t-esc="r['folio']"/>
                             </td>
                             <td width="10%">
-                                <span t-esc="r.modena" />
+                                <span t-esc="r['modena']"/>
                             </td>
                             <td width="10%">
                                 
                             </td>
                             <td width="10%">
-                                 <span t-esc="r.parcialidad" />
+                                 <span t-esc="r['parcialidad']"/>
                             </td>
                             <td width="10%">
-                                <span t-esc="r.metodo" />
+                                <span t-esc="r['metodo']"/>
                             </td>
                             
                             <td width="10%">
-                                <span>$</span><span t-esc="'{0:,.2f}'.format(r.s_anterior)"/>
+                                <span>$</span><span t-esc="'{0:,.2f}'.format(float(r['s_anterior']))"/>
                             </td>
 
                             <td width="10%">
 
-                                <span>$</span><span t-esc="'{0:,.2f}'.format(r.s_pagado)"/>
+                                <span>$</span><span t-esc="'{0:,.2f}'.format(float(r['s_pagado']))"/>
                             </td>
 
                             <td width="10%">
-                                <span>$</span><span t-esc="'{0:,.2f}'.format(r.s_insoluto)"/>
+                                <span>$</span><span t-esc="'{0:,.2f}'.format(float(r['s_insoluto']))"/>
                             </td>
 
                         </tr> 
+                   
                     </t>
                     </t>
+                   
              
                 </tbody>
              </table>
@@ -459,42 +462,43 @@
                     </tr>
                 </thead>
                 <tbody class="sale_tbody">
-                    <t t-foreach="o.complemento_ids" t-as="r">
-                    <t t-if="r.nodo == '2'">                   
+                     <t t-set="comp2" t-value="o.complemento()"/>
+                    <t t-foreach="comp2" t-as="r">
+                    <t t-if="r['nodo'] == 2">                   
 
-                        <tr>                        
+                          <tr>                        
                           <td width="20%">
-                                <t t-esc="r.id_documento" />
+                                <t t-esc="r['id_documento']"/>
                                
                             </td>
                             <td width="10%">
-                                <t t-esc="r.serie" />
-                                <t t-esc="r.folio"/>
+                                <t t-esc="r['serie']"/>
+                                <t t-esc="r['folio']"/>
                             </td>
                             <td width="10%">
-                                <span t-esc="r.modena" />
+                                <span t-esc="r['modena']"/>
                             </td>
                             <td width="10%">
                                 
                             </td>
                             <td width="10%">
-                                 <span t-esc="r.parcialidad" />
+                                 <span t-esc="r['parcialidad']"/>
                             </td>
                             <td width="10%">
-                                <span t-esc="r.metodo" />
+                                <span t-esc="r['metodo']"/>
                             </td>
                             
                             <td width="10%">
-                                <span>$</span><span t-esc="'{0:,.2f}'.format(r.s_anterior)"/>
+                                <span>$</span><span t-esc="'{0:,.2f}'.format(float(r['s_anterior']))"/>
                             </td>
 
                             <td width="10%">
 
-                                <span>$</span><span t-esc="'{0:,.2f}'.format(r.s_pagado)"/>
+                                <span>$</span><span t-esc="'{0:,.2f}'.format(float(r['s_pagado']))"/>
                             </td>
 
                             <td width="10%">
-                                <span>$</span><span t-esc="'{0:,.2f}'.format(r.s_insoluto)"/>
+                                <span>$</span><span t-esc="'{0:,.2f}'.format(float(r['s_insoluto']))"/>
                             </td>
 
                         </tr> 
