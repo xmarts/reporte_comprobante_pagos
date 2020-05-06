@@ -275,6 +275,9 @@
                    <table width="100%">
                 <tr class="text-center"><td>Complemento Recepción Pagos</td></tr>
             </table>
+             <t t-set="com_enca" t-value="o.complemento_encavezado()"/>
+                    <t t-foreach="com_enca" t-as="r">
+                       <t t-if="r['numero_pagos'] == 2">
                     <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
                <t t-set="comp" t-value="xml.Complemento" />
                <t t-set="tfd" t-value="docs.l10n_mx_edi_get_pago_etree(xml)" />
@@ -284,7 +287,7 @@
                  </t>            
             
                   <t t-foreach="lis" t-as="rec">               
-               <t t-if="rec[1] != '17'">
+               <t t-if="rec[1] == r['pago_mayor']">
                  <table width="100%">
                 <tr>
                     <td>Fecha Pago</td>
@@ -329,8 +332,67 @@
                  </tr>
             
             </table>
+          </t>
         </t>
               </t>
+               <t t-if="r['numero_pagos'] == 1">
+                    <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
+               <t t-set="comp" t-value="xml.Complemento" />
+               <t t-set="tfd" t-value="docs.l10n_mx_edi_get_pago_etree(xml)" />
+                 <t t-set="lis" t-value="[]" />
+                 <t t-foreach="tfd.Pago" t-as="t">
+    <t t-set="lis" t-value="lis +  [(t.get('FechaPago'),t.get('FormaDePagoP'),t.get('MonedaP'),t.get('Monto'))]" />
+                 </t>            
+            
+                  <t t-foreach="lis" t-as="rec">    
+                 <table width="100%">
+                <tr>
+                    <td>Fecha Pago</td>
+                    <td><span t-esc="rec[0]" /> </td>
+                    <td>Num. Operacion</td>
+                    <td><span t-field="o.communication"/></td>
+                    <td>TipoCadPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>Forma de Pago</td>
+                    <td><span t-esc="rec[1]" /></td>
+                    <td>RfcEmisorCtaOrd</td>
+                    <td></td>
+                    <td>CertPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>Moneda</td>
+                    <td><span t-esc="rec[2]" /></td>
+                    <td>NomBancoOrd</td>
+                    <td></td>
+                    <td>CadPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>TipoCambio</td>
+                    <td></td>
+                    <td>CtaOrdenante</td>
+                    <td></td>
+                    <td>SelloPago</td>
+                    <td></td>
+                 </tr>
+                   <tr>
+                    <td>Monto</td>
+                    <td>
+                        <span>$</span><span t-esc="'{0:,.2f}'.format(float(rec[3]))"/></td>
+                    <td>RfcEmisorCtaBen</td>
+                    <td></td>
+                    <td>CtaBeneficiario</td>
+                    <td></td>
+                 </tr>
+            
+            </table>
+          </t>
+       
+               </t>
+            </t>
              <table class="table "  width="100%">
              
                <!-- <span t-field="docs.payments_widget" />-->
@@ -407,6 +469,9 @@
                                <table width="100%">
                 <tr class="text-center"><td>Complemento Recepcion Pagos</td></tr>
             </table>
+             <t t-set="com_enca" t-value="o.complemento_encavezado()"/>
+                    <t t-foreach="com_enca" t-as="r">
+                       <t t-if="r['numero_pagos'] == 2">
                     <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
                <t t-set="comp" t-value="xml.Complemento" />
                <t t-set="tfd" t-value="docs.l10n_mx_edi_get_pago_etree(xml)" />
@@ -416,7 +481,7 @@
                  </t>            
             
                   <t t-foreach="lis" t-as="rec">               
-              <t t-if="rec[1] == '17'">
+              <t t-if="rec[1] == r['pago_menor']">
                  <table width="100%">
                 <tr>
                     <td>Fecha Pago</td>
@@ -445,6 +510,8 @@
             </table>
         </t>
               </t>
+            </t>
+          </t>
              <table class="table "  width="100%">
              
                <!-- <span t-field="docs.payments_widget" />-->

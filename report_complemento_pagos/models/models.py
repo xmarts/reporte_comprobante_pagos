@@ -182,6 +182,48 @@ class pagos_pagos(models.Model):
                                     r1.append(values)
                     return r1
 
+    @api.model
+    def complemento_encavezado(self):
+        data = base64.decodestring(self.l10n_mx_edi_cfdi)
+        root = ElementTree.fromstring(data)
+        r1 = []
+        if root:
+            count = 0
+            if count == 0:
+                count += count + 1
+                pa = []
+                num_pagos = 0
+                retorno = []
+                for child1 in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
+                    for pagos1 in child1:
+                        for p in pagos1:
+                            num_pagos += 1
+                            monto = p.get('Monto')
+                            values = {
+                                monto
+                            }
+                            pa.append(monto)
+                if num_pagos == 2:
+                    pago_mayor = max(pa)
+                    pago_menor = min(pa)
+                    values = {
+                        'pago_mayor': pago_mayor,
+                        'pago_menor': pago_menor,
+                        'numero_pagos': 2
+                    }
+                    retorno.append(values)
+                    return retorno
+                else:
+                    pago_mayor = max(pa)
+                    values = {
+                        'pago_mayor': pago_mayor,
+                        'numero_pagos': 1
+                    }
+                    retorno.append(values)
+                    return retorno
+
+
+
 
 
 class pagos_pagos(models.Model):
