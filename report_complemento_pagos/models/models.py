@@ -108,79 +108,44 @@ class pagos_pagos(models.Model):
         data = base64.decodestring(self.l10n_mx_edi_cfdi)
         root =ElementTree.fromstring(data)
         r1=[]
-        if root:
-            count = 0
-            if count == 0:
-                count += count + 1
-                pa = []
-                num_pagos = 0
-                for child1 in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
-                    for pagos1 in child1:
-                        for p in pagos1:
-                            num_pagos += 1
-                            monto = p.get('Monto')
+        if root:            
+            for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
+                for pagos in child:
+                    for pago in pagos:
+                        for doc in pago[0]:
                             values = {
-                                monto
+                            'nodo': 1,
+                            'id_documento':doc.attrib['IdDocumento'],
+                            'serie':doc.attrib['Serie'],
+                            'folio':doc.attrib['Folio'],
+                            'modena': doc.attrib['MonedaDR'],
+                            'parcialidad':doc.attrib['NumParcialidad'],
+                            'metodo':doc.attrib['MetodoDePagoDR'],
+                            's_anterior':doc.attrib['ImpSaldoAnt'],
+                            's_pagado':doc.attrib['ImpPagado'],
+                            's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                            'account_id':self.id
                             }
-                            pa.append(monto)
-                if num_pagos == 2:
-                    pago_mayor = max(pa)
-                    pago_menor = min(pa)
-                    for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
-                        for pagos in child:
-                            for pago in pagos:
-                                for doc in pago:
-                                    if pago.attrib['Monto'] == pago_menor:
-                                        values = {
-                                        'nodo': 2,
-                                        'id_documento':doc.attrib['IdDocumento'],
-                                        'serie':doc.attrib['Serie'],
-                                        'folio':doc.attrib['Folio'],
-                                        'modena': doc.attrib['MonedaDR'],
-                                        'parcialidad':doc.attrib['NumParcialidad'],
-                                        'metodo':doc.attrib['MetodoDePagoDR'],
-                                        's_anterior':doc.attrib['ImpSaldoAnt'],
-                                        's_pagado':doc.attrib['ImpPagado'],
-                                        's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                        'account_id':self.id
-                                        }
-                                        r1.append(values)
-                                    if pago.attrib['Monto'] == pago_mayor:
-                                        values = {
-                                        'nodo': 1,
-                                        'id_documento':doc.attrib['IdDocumento'],
-                                        'serie':doc.attrib['Serie'],
-                                        'folio':doc.attrib['Folio'],
-                                        'modena': doc.attrib['MonedaDR'],
-                                        'parcialidad':doc.attrib['NumParcialidad'],
-                                        'metodo':doc.attrib['MetodoDePagoDR'],
-                                        's_anterior':doc.attrib['ImpSaldoAnt'],
-                                        's_pagado':doc.attrib['ImpPagado'],
-                                        's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                        'account_id':self.id
-                                        }
-                                        r1.append(values)
-                    return r1
-                else:
-                    for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
-                        for pagos in child:
-                            for pago in pagos:
-                                for doc in pago:
-                                    values = {
-                                        'nodo': 1,
-                                        'id_documento': doc.attrib['IdDocumento'],
-                                        'serie': doc.attrib['Serie'],
-                                        'folio': doc.attrib['Folio'],
-                                        'modena': doc.attrib['MonedaDR'],
-                                        'parcialidad': doc.attrib['NumParcialidad'],
-                                        'metodo': doc.attrib['MetodoDePagoDR'],
-                                        's_anterior': doc.attrib['ImpSaldoAnt'],
-                                        's_pagado': doc.attrib['ImpPagado'],
-                                        's_insoluto': doc.attrib['ImpSaldoInsoluto'],
-                                        'account_id': self.id
-                                    }
-                                    r1.append(values)
-                    return r1
+                            r1.append(values)
+                        if pago[1] != null:
+                            for doc in pago[1]:                                   
+                                values = {
+                                'nodo': 2,
+                                'id_documento':doc.attrib['IdDocumento'],
+                                'serie':doc.attrib['Serie'],
+                                'folio':doc.attrib['Folio'],
+                                'modena': doc.attrib['MonedaDR'],
+                                'parcialidad':doc.attrib['NumParcialidad'],
+                                'metodo':doc.attrib['MetodoDePagoDR'],
+                                's_anterior':doc.attrib['ImpSaldoAnt'],
+                                's_pagado':doc.attrib['ImpPagado'],
+                                's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                'account_id':self.id
+                                }
+                                r1.append(values)
+                        
+                        return r1
+              
 
     @api.model
     def complemento_encavezado(self):
