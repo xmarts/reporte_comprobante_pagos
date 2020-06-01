@@ -111,81 +111,108 @@ class pagos_pagos(models.Model):
         if root:            
             for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
                 for pagos in child:
-                    for pago in pagos:
-                        for doc in pago[0]:
-                            values = {
-                            'nodo': 1,
-                            'id_documento':doc.attrib['IdDocumento'],
-                            'serie':doc.attrib['Serie'],
-                            'folio':doc.attrib['Folio'],
-                            'modena': doc.attrib['MonedaDR'],
-                            'parcialidad':doc.attrib['NumParcialidad'],
-                            'metodo':doc.attrib['MetodoDePagoDR'],
-                            's_anterior':doc.attrib['ImpSaldoAnt'],
-                            's_pagado':doc.attrib['ImpPagado'],
-                            's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                            'account_id':self.id
-                            }
-                            r1.append(values)
-                        if pago[1]:
-                            for doc in pago[1]:                                   
-                                values = {
-                                'nodo': 2,
-                                'id_documento':doc.attrib['IdDocumento'],
-                                'serie':doc.attrib['Serie'],
-                                'folio':doc.attrib['Folio'],
-                                'modena': doc.attrib['MonedaDR'],
-                                'parcialidad':doc.attrib['NumParcialidad'],
-                                'metodo':doc.attrib['MetodoDePagoDR'],
-                                's_anterior':doc.attrib['ImpSaldoAnt'],
-                                's_pagado':doc.attrib['ImpPagado'],
-                                's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                'account_id':self.id
-                                }
-                                r1.append(values)
-                        
-                        return r1
+                    for pago in pagos:                        
+                        for doc in pago:
+                            num_fac = str(doc.attrib['Serie']) +str(doc.attrib['Folio'])
+                            
+                            
+                            for inv in self.invoice_lines:
+                                if inv.invoice == num_fac  and inv.comision_col == False:                            
+                                    values = {
+                                    'nodo': 1,
+                                    'id_documento':doc.attrib['IdDocumento'],
+                                    'serie':doc.attrib['Serie'],
+                                    'folio':doc.attrib['Folio'],
+                                    'modena': doc.attrib['MonedaDR'],
+                                    'parcialidad':doc.attrib['NumParcialidad'],
+                                    'metodo':doc.attrib['MetodoDePagoDR'],
+                                    's_anterior':doc.attrib['ImpSaldoAnt'],
+                                    's_pagado':doc.attrib['ImpPagado'],
+                                    's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                    'account_id':self.id
+                                    }
+                                    r1.append(values)
+                                if inv.invoice == num_fac and inv.comision_col == True:
+                                    monto = float(doc.attrib['ImpPagado'])
+                                    monto_fac = inv.allocation - inv.comision_cam
+                                    print("num_fac",monto)
+                                    if inv.comision_cam == monto:
+                            
+                                        values = {
+                                        'nodo': 2,
+                                        'id_documento':doc.attrib['IdDocumento'],
+                                        'serie':doc.attrib['Serie'],
+                                        'folio':doc.attrib['Folio'],
+                                        'modena': doc.attrib['MonedaDR'],
+                                        'parcialidad':doc.attrib['NumParcialidad'],
+                                        'metodo':doc.attrib['MetodoDePagoDR'],
+                                        's_anterior':doc.attrib['ImpSaldoAnt'],
+                                        's_pagado':doc.attrib['ImpPagado'],
+                                        's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                        'account_id':self.id
+                                        }
+                                        r1.append(values)
+                                    if monto_fac == monto:
+                                        values = {
+                                        'nodo': 1,
+                                        'id_documento':doc.attrib['IdDocumento'],
+                                        'serie':doc.attrib['Serie'],
+                                        'folio':doc.attrib['Folio'],
+                                        'modena': doc.attrib['MonedaDR'],
+                                        'parcialidad':doc.attrib['NumParcialidad'],
+                                        'metodo':doc.attrib['MetodoDePagoDR'],
+                                        's_anterior':doc.attrib['ImpSaldoAnt'],
+                                        's_pagado':doc.attrib['ImpPagado'],
+                                        's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                        'account_id':self.id
+                                        }
+                                        r1.append(values)
+                       
+            return r1
               
 
     @api.model
     def complemento_encavezado(self):
+          #self.complemento_ids = [(5, 0, 0)]
         data = base64.decodestring(self.l10n_mx_edi_cfdi)
-        root = ElementTree.fromstring(data)
-        r1 = []
-        if root:
-            count = 0
-            if count == 0:
-                count += count + 1
-                pa = []
-                num_pagos = 0
-                retorno = []
-                for child1 in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
-                    for pagos1 in child1:
-                        for p in pagos1:
-                            num_pagos += 1
-                            monto = p.get('Monto')
+        root =ElementTree.fromstring(data)
+        r2=[]
+        if root:            
+            for child in root.findall('{http://www.sat.gob.mx/cfd/3}Complemento'):
+                for pagos in child:
+                    for pago in pagos:              
+                        num_fac = float(pago.attrib['Monto'])
+                        monto_fac = 0
+                        monto_facto = 0                  
+                        for inv in self.invoice_lines:
+                            if inv.comision_col == False:
+                                monto_fac += inv.allocation
+                            else: 
+                                print(monto_fac,"ddddrrrrrr",inv.allocation,inv.comision_cam)
+                                monto_fac += inv.allocation - inv.comision_cam
+                                monto_facto += inv.comision_cam
+                        print("xxxxx",num_fac,"ddddd",monto_facto,monto_fac)
+                        if num_fac == monto_fac:
                             values = {
-                                monto
+                            'nodo': 1,
+                            'FechaPago':pago.attrib['FechaPago'],
+                            'FormaDePagoP':pago.attrib['FormaDePagoP'],
+                            'MonedaP':pago.attrib['MonedaP'],
+                            'Monto': pago.attrib['Monto'],                           
                             }
-                            pa.append(monto)
-                if num_pagos == 2:
-                    pago_mayor = max(pa)
-                    pago_menor = min(pa)
-                    values = {
-                        'pago_mayor': pago_mayor,
-                        'pago_menor': pago_menor,
-                        'numero_pagos': 2
-                    }
-                    retorno.append(values)
-                    return retorno
-                else:
-                    pago_mayor = max(pa)
-                    values = {
-                        'pago_mayor': pago_mayor,
-                        'numero_pagos': 1
-                    }
-                    retorno.append(values)
-                    return retorno
+                            r2.append(values)
+                        if num_fac == monto_facto:
+                            values = {
+                            'nodo': 2,
+                            'FechaPago':pago.attrib['FechaPago'],
+                            'FormaDePagoP':pago.attrib['FormaDePagoP'],
+                            'MonedaP':pago.attrib['MonedaP'],
+                            'Monto': pago.attrib['Monto'],                           
+                            }
+                            r2.append(values)
+                            
+            print("cccccccccccccc",r2)      
+            return r2
 
 
 
