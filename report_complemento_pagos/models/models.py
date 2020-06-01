@@ -127,7 +127,7 @@ class pagos_pagos(models.Model):
                             'account_id':self.id
                             }
                             r1.append(values)
-                        if pago[1] != null:
+                        if pago[1]:
                             for doc in pago[1]:                                   
                                 values = {
                                 'nodo': 2,
