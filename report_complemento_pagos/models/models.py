@@ -252,8 +252,9 @@ class pagos_pagos(models.Model):
                                 print(monto_fac,"ddddrrrrrr",inv.allocation,inv.comision_cam)
                                 monto_fac += inv.allocation - inv.comision_cam
                                 monto_facto += inv.comision_cam
-                        print("xxxxx",num_fac,"ddddd",monto_facto,monto_fac)
-                        if num_fac == monto_fac:
+                        monto_fac_final = round(monto_fac,2)
+                        monto_facto_final = round(monto_facto,2)
+                        if num_fac == monto_fac_final:
                             values = {
                             'nodo': 1,
                             'FechaPago':pago.attrib['FechaPago'],
@@ -262,7 +263,7 @@ class pagos_pagos(models.Model):
                             'Monto': pago.attrib['Monto'],                           
                             }
                             r2.append(values)
-                        if num_fac == monto_facto:
+                        if num_fac == monto_facto_final:
                             values = {
                             'nodo': 2,
                             'FechaPago':pago.attrib['FechaPago'],
