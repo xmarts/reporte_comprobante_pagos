@@ -119,7 +119,6 @@ class pagos_pagos(models.Model):
                                 num = inv.invoice_id.journal_id.sequence_id.padding
                                 if len(doc.attrib['Folio']) == num:
                                     num_fac = str(doc.attrib['Serie']) +str(doc.attrib['Folio'])
-                                    print("ddd",num_fac_test)
                                     if inv.invoice == num_fac  and inv.comision_col == False:                            
                                         values = {
                                         'nodo': 1,
