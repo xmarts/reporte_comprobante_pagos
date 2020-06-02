@@ -113,46 +113,14 @@ class pagos_pagos(models.Model):
                 for pagos in child:
                     for pago in pagos:                        
                         for doc in pago:
-                            num_fac = str(doc.attrib['Serie']) +str(doc.attrib['Folio'])
                             
                             
                             for inv in self.invoice_lines:
-                                if inv.invoice == num_fac  and inv.comision_col == False:                            
-                                    values = {
-                                    'nodo': 1,
-                                    'id_documento':doc.attrib['IdDocumento'],
-                                    'serie':doc.attrib['Serie'],
-                                    'folio':doc.attrib['Folio'],
-                                    'modena': doc.attrib['MonedaDR'],
-                                    'parcialidad':doc.attrib['NumParcialidad'],
-                                    'metodo':doc.attrib['MetodoDePagoDR'],
-                                    's_anterior':doc.attrib['ImpSaldoAnt'],
-                                    's_pagado':doc.attrib['ImpPagado'],
-                                    's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                    'account_id':self.id
-                                    }
-                                    r1.append(values)
-                                if inv.invoice == num_fac and inv.comision_col == True:
-                                    monto = float(doc.attrib['ImpPagado'])
-                                    monto_fac = inv.allocation - inv.comision_cam
-                                    print("num_fac",monto)
-                                    if inv.comision_cam == monto:
-                            
-                                        values = {
-                                        'nodo': 2,
-                                        'id_documento':doc.attrib['IdDocumento'],
-                                        'serie':doc.attrib['Serie'],
-                                        'folio':doc.attrib['Folio'],
-                                        'modena': doc.attrib['MonedaDR'],
-                                        'parcialidad':doc.attrib['NumParcialidad'],
-                                        'metodo':doc.attrib['MetodoDePagoDR'],
-                                        's_anterior':doc.attrib['ImpSaldoAnt'],
-                                        's_pagado':doc.attrib['ImpPagado'],
-                                        's_insoluto':doc.attrib['ImpSaldoInsoluto'],
-                                        'account_id':self.id
-                                        }
-                                        r1.append(values)
-                                    if monto_fac == monto:
+                                num = inv.invoice_id.journal_id.sequence_id.padding
+                                if len(doc.attrib['Folio']) == num:
+                                    num_fac = str(doc.attrib['Serie']) +str(doc.attrib['Folio'])
+                                    print("ddd",num_fac_test)
+                                    if inv.invoice == num_fac  and inv.comision_col == False:                            
                                         values = {
                                         'nodo': 1,
                                         'id_documento':doc.attrib['IdDocumento'],
@@ -167,6 +135,99 @@ class pagos_pagos(models.Model):
                                         'account_id':self.id
                                         }
                                         r1.append(values)
+                                    if inv.invoice == num_fac and inv.comision_col == True:
+                                        monto = float(doc.attrib['ImpPagado'])
+                                        monto_fac = inv.allocation - inv.comision_cam
+                                        print("num_fac",monto)
+                                        if inv.comision_cam == monto:
+                                
+                                            values = {
+                                            'nodo': 2,
+                                            'id_documento':doc.attrib['IdDocumento'],
+                                            'serie':doc.attrib['Serie'],
+                                            'folio':doc.attrib['Folio'],
+                                            'modena': doc.attrib['MonedaDR'],
+                                            'parcialidad':doc.attrib['NumParcialidad'],
+                                            'metodo':doc.attrib['MetodoDePagoDR'],
+                                            's_anterior':doc.attrib['ImpSaldoAnt'],
+                                            's_pagado':doc.attrib['ImpPagado'],
+                                            's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                            'account_id':self.id
+                                            }
+                                            r1.append(values)
+                                        if monto_fac == monto:
+                                            values = {
+                                            'nodo': 1,
+                                            'id_documento':doc.attrib['IdDocumento'],
+                                            'serie':doc.attrib['Serie'],
+                                            'folio':doc.attrib['Folio'],
+                                            'modena': doc.attrib['MonedaDR'],
+                                            'parcialidad':doc.attrib['NumParcialidad'],
+                                            'metodo':doc.attrib['MetodoDePagoDR'],
+                                            's_anterior':doc.attrib['ImpSaldoAnt'],
+                                            's_pagado':doc.attrib['ImpPagado'],
+                                            's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                            'account_id':self.id
+                                            }
+                                            r1.append(values)
+                                else:
+                                    folio =str(doc.attrib['Folio'])
+                                    folio_comple = folio.zfill(num)
+                                    num_fac_com = str(doc.attrib['Serie']) +str(folio_comple)
+                                    print("fffff",num_fac_com)
+
+
+
+                                    if inv.invoice == num_fac_com  and inv.comision_col == False:                            
+                                        values = {
+                                        'nodo': 1,
+                                        'id_documento':doc.attrib['IdDocumento'],
+                                        'serie':doc.attrib['Serie'],
+                                        'folio':doc.attrib['Folio'],
+                                        'modena': doc.attrib['MonedaDR'],
+                                        'parcialidad':doc.attrib['NumParcialidad'],
+                                        'metodo':doc.attrib['MetodoDePagoDR'],
+                                        's_anterior':doc.attrib['ImpSaldoAnt'],
+                                        's_pagado':doc.attrib['ImpPagado'],
+                                        's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                        'account_id':self.id
+                                        }
+                                        r1.append(values)
+                                    if inv.invoice == num_fac_com and inv.comision_col == True:
+                                        monto = float(doc.attrib['ImpPagado'])
+                                        monto_fac = inv.allocation - inv.comision_cam
+                                        print("num_fac",monto)
+                                        if inv.comision_cam == monto:
+                                
+                                            values = {
+                                            'nodo': 2,
+                                            'id_documento':doc.attrib['IdDocumento'],
+                                            'serie':doc.attrib['Serie'],
+                                            'folio':doc.attrib['Folio'],
+                                            'modena': doc.attrib['MonedaDR'],
+                                            'parcialidad':doc.attrib['NumParcialidad'],
+                                            'metodo':doc.attrib['MetodoDePagoDR'],
+                                            's_anterior':doc.attrib['ImpSaldoAnt'],
+                                            's_pagado':doc.attrib['ImpPagado'],
+                                            's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                            'account_id':self.id
+                                            }
+                                            r1.append(values)
+                                        if monto_fac == monto:
+                                            values = {
+                                            'nodo': 1,
+                                            'id_documento':doc.attrib['IdDocumento'],
+                                            'serie':doc.attrib['Serie'],
+                                            'folio':doc.attrib['Folio'],
+                                            'modena': doc.attrib['MonedaDR'],
+                                            'parcialidad':doc.attrib['NumParcialidad'],
+                                            'metodo':doc.attrib['MetodoDePagoDR'],
+                                            's_anterior':doc.attrib['ImpSaldoAnt'],
+                                            's_pagado':doc.attrib['ImpPagado'],
+                                            's_insoluto':doc.attrib['ImpSaldoInsoluto'],
+                                            'account_id':self.id
+                                            }
+                                            r1.append(values)
                        
             return r1
               
