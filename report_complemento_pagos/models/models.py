@@ -136,9 +136,10 @@ class pagos_pagos(models.Model):
                                         r1.append(values)
                                     if inv.invoice == num_fac and inv.comision_col == True:
                                         monto = float(doc.attrib['ImpPagado'])
+                                        monto_final = round(monto,2)
                                         monto_fac = inv.allocation - inv.comision_cam
                                         monto_fac_final =  round(monto_fac,2)
-                                        if inv.comision_cam == monto:
+                                        if inv.comision_cam == monto_final:
                                 
                                             values = {
                                             'nodo': 2,
@@ -154,7 +155,7 @@ class pagos_pagos(models.Model):
                                             'account_id':self.id
                                             }
                                             r1.append(values)
-                                        if monto_fac_final == monto:
+                                        if monto_fac_final == monto_final:
                                             values = {
                                             'nodo': 1,
                                             'id_documento':doc.attrib['IdDocumento'],
@@ -194,9 +195,10 @@ class pagos_pagos(models.Model):
                                         r1.append(values)
                                     if inv.invoice == num_fac_com and inv.comision_col == True:
                                         monto = float(doc.attrib['ImpPagado'])
+                                        monto_final = round(monto,2)
                                         monto_fac = inv.allocation - inv.comision_cam
                                         monto_fac_final =  round(monto_fac,2)
-                                        if inv.comision_cam == monto:
+                                        if inv.comision_cam == monto_final:
                                 
                                             values = {
                                             'nodo': 2,
@@ -212,7 +214,7 @@ class pagos_pagos(models.Model):
                                             'account_id':self.id
                                             }
                                             r1.append(values)
-                                        if monto_fac_final == monto:
+                                        if monto_fac_final == monto_final:
                                             values = {
                                             'nodo': 1,
                                             'id_documento':doc.attrib['IdDocumento'],
