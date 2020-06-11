@@ -142,8 +142,10 @@ class pagos_pagos(models.Model):
                                         monto_final = round(monto,2)
                                         monto_fac = inv.allocation - inv.comision_cam
                                         monto_fac_final =  round(monto_fac,2)
-                                        _logger.info("VALORESSSSSSSSSSSS  Comision <%s>  mmonto factura <%s> monto final <%s>", inv.comision_cam, monto_final, monto_fac_final)
-                                        if inv.comision_cam == monto_final:
+                                        comsion = round(inv.comision_cam,2)
+                                        _logger.info("VALORESSSSSSSSSSSS  Comision sin redondeo <%s> Comision con redondeo <%s> mmonto factura <%s> monto final <%s>", inv.comision_cam, comsion, monto_final, monto_fac_final)
+                                        
+                                        if comsion == monto_final:
                                 
                                             values = {
                                             'nodo': 2,
@@ -202,8 +204,10 @@ class pagos_pagos(models.Model):
                                         monto_final = round(monto,2)
                                         monto_fac = inv.allocation - inv.comision_cam
                                         monto_fac_final =  round(monto_fac,2)
-                                        _logger.info("VALORESSSSSSSSSSSS  Comision <%s>  mmonto factura <%s> monto final <%s>", inv.comision_cam, monto_final, monto_fac_final)
-                                        if inv.comision_cam == monto_final:
+                                        comsion = round(inv.comision_cam,2)
+                                        _logger.info("VALORESSSSSSSSSSSS  Comision sin redondeo <%s> Comision con redondeo <%s> mmonto factura <%s> monto final <%s>", inv.comision_cam, comsion, monto_final, monto_fac_final)
+                                       
+                                        if comsion == monto_final:
                                 
                                             values = {
                                             'nodo': 2,
@@ -311,4 +315,3 @@ class pagos_pagos(models.Model):
                 rec.write({'tipo_relacion':origin[0]})
                 for u in uuids:
                     rec.write({'uuid':u})
-                
