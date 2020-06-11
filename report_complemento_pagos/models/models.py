@@ -14,6 +14,9 @@ from odoo.tools.float_utils import float_compare
 from odoo.tools.misc import html_escape
 from odoo.exceptions import UserError, ValidationError
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class Complemento(models.Model):
     _name = 'complemento'
     nodo = fields.Char(
@@ -139,6 +142,7 @@ class pagos_pagos(models.Model):
                                         monto_final = round(monto,2)
                                         monto_fac = inv.allocation - inv.comision_cam
                                         monto_fac_final =  round(monto_fac,2)
+                                        _logger.info("VALORESSSSSSSSSSSS  Comision <%s>  mmonto factura <%s> monto final <%s>", inv.comision_cam, monto_final, monto_fac_final)
                                         if inv.comision_cam == monto_final:
                                 
                                             values = {
@@ -198,6 +202,7 @@ class pagos_pagos(models.Model):
                                         monto_final = round(monto,2)
                                         monto_fac = inv.allocation - inv.comision_cam
                                         monto_fac_final =  round(monto_fac,2)
+                                        _logger.info("VALORESSSSSSSSSSSS  Comision <%s>  mmonto factura <%s> monto final <%s>", inv.comision_cam, monto_final, monto_fac_final)
                                         if inv.comision_cam == monto_final:
                                 
                                             values = {
