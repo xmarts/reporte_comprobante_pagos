@@ -388,6 +388,47 @@
                    
                     </t>
                     </t>
+                    <t t-if="not o.invoice_lines">
+                        <t t-set="xml" t-value="docs.l10n_mx_edi_get_xml_etree()" />
+                        <t t-set="tfd" t-value="docs.l10n_mx_edi_get_pago_etree(xml)" />
+                         <t t-foreach="tfd.Pago" t-as="rec">
+                          <tr>                        
+                          <td width="20%">
+                               <span t-esc="rec.DoctoRelacionado.get('IdDocumento')"/>
+                            </td>
+                            <td width="10%">
+                                 <span t-esc="rec.DoctoRelacionado.get('Serie')"/>
+                                 <span t-esc="rec.DoctoRelacionado.get('Folio')"/>
+                            </td>
+                            <td width="10%">
+                              <span t-esc="rec.DoctoRelacionado.get('MonedaDR')"/>
+                            </td>
+                            <td width="10%">
+                               
+                            </td>
+                            <td width="10%">
+                                <span t-esc="rec.DoctoRelacionado.get('NumParcialidad')"/>
+                            </td>
+                            <td width="10%">
+                               <span t-esc="rec.DoctoRelacionado.get('MetodoDePagoDR')"/>
+                            </td>
+                            
+                            <td width="10%">
+                                <span>$</span> <span t-esc="'{0:,.2f}'.format(float(rec.DoctoRelacionado.get('ImpSaldoAnt')))"/>
+                            </td>
+
+                            <td width="10%"> 
+
+                                <span>$</span> <span t-esc="'{0:,.2f}'.format(float(rec.DoctoRelacionado.get('ImpPagado')))"/>
+                            </td>
+
+                            <td width="10%">
+                                <span>$</span> <span t-esc="'{0:,.2f}'.format(float(rec.DoctoRelacionado.get('ImpSaldoInsoluto')))"/>
+                            </td>
+
+                        </tr> 
+                    </t>
+                    </t>
                    
              
                 </tbody>
