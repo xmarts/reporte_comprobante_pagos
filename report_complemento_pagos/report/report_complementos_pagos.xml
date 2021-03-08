@@ -289,18 +289,27 @@
                     <td></td>
                  </tr>
                    <tr>
+                     <t t-set="NomBancoOrd" t-value=""/>
+                     <t t-set="RfcEmisorCtaOrd" t-value=""/>
+                     <t t-set="CtaOrdenante" t-value=""/>
+                     <t t-foreach="o.partner_id.bank_ids" t-as="ban">
+                        <t t-set="NomBancoOrd" t-value="ban.bank_id.name"/>
+                        <t t-set="RfcEmisorCtaOrd" t-value="ban.bank_id.street"/>
+                        <t t-set="CtaOrdenante" t-value="ban.acc_number"/>
+                     </t>
                     <td>Forma de Pago</td>
-                    <td><t t-esc="enc['FormaDePagoP']"/></td>
+                    <td><t t-esc="o.l10n_mx_edi_payment_method_id.name"/></td>
                     <td>RfcEmisorCtaOrd</td>
-                    <td></td>
+                    <td><t t-esc="RfcEmisorCtaOrd"/></td>
                     <td>CertPago</td>
                     <td></td>
                  </tr>
                    <tr>
+
                     <td>Moneda</td>
                     <td><t t-esc="enc['MonedaP']"/></td>
                     <td>NomBancoOrd</td>
-                    <td></td>
+                    <td><t t-esc="NomBancoOrd"/></td>
                     <td>CadPago</td>
                     <td></td>
                  </tr>
@@ -308,7 +317,7 @@
                     <td>TipoCambio</td>
                     <td></td>
                     <td>CtaOrdenante</td>
-                    <td></td>
+                    <td><t t-esc="CtaOrdenante"/></td>
                     <td>SelloPago</td>
                     <td></td>
                  </tr>
