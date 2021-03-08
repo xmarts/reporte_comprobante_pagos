@@ -290,17 +290,17 @@
                  </tr>
                    <tr>
                      <t t-set="NomBancoOrd" t-value=""/>
-                     <t t-set="RfcEmisorCtaOrd" t-value=""/>
+                     <t t-set="RfcEmisor" t-value=""/>
                      <t t-set="CtaOrdenante" t-value=""/>
                      <t t-foreach="o.partner_id.bank_ids" t-as="ban">
                         <t t-set="NomBancoOrd" t-value="ban.bank_id.name"/>
-                        <t t-set="RfcEmisorCtaOrd" t-value="ban.bank_id.street"/>
+                        <t t-set="RfcEmisor" t-value="ban.bank_id.l10n_mx_edi_vat"/>
                         <t t-set="CtaOrdenante" t-value="ban.acc_number"/>
                      </t>
                     <td>Forma de Pago</td>
                     <td><t t-esc="o.l10n_mx_edi_payment_method_id.name"/></td>
                     <td>RfcEmisorCtaOrd</td>
-                    <td><t t-esc="RfcEmisorCtaOrd"/></td>
+                    <td><t t-esc="RfcEmisor"/></td>
                     <td>CertPago</td>
                     <td></td>
                  </tr>
