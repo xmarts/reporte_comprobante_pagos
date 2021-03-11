@@ -301,7 +301,7 @@
                     <td><t t-esc="o.l10n_mx_edi_payment_method_id.name"/></td>
                     <td>RfcEmisorCtaOrd</td>
                     <td>
-                      <t t-if="o.l10n_mx_edi_payment_method_id=='01'">
+                      <t t-if="o.l10n_mx_edi_payment_method_id.code!='01'">
                         <t t-esc="RfcEmisor"/>
                       </t>
                     </td>
@@ -314,7 +314,7 @@
                     <td><t t-esc="enc['MonedaP']"/></td>
                     <td>NomBancoOrd</td>
                     <td>
-                      <t t-if="o.l10n_mx_edi_payment_method_id=='01'">
+                      <t t-if="o.l10n_mx_edi_payment_method_id.code!='01'">
                         <t t-esc="NomBancoOrd"/>
                       </t>
                     </td>
@@ -326,7 +326,7 @@
                     <td></td>
                     <td>CtaOrdenante</td>
                     <td>
-                      <t t-if="o.l10n_mx_edi_payment_method_id=='01'">
+                      <t t-if="o.l10n_mx_edi_payment_method_id.code!='01'">
                         <t t-esc="CtaOrdenante"/>
                       </t>
                     </td>
