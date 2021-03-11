@@ -300,7 +300,11 @@
                     <td>Forma de Pago</td>
                     <td><t t-esc="o.l10n_mx_edi_payment_method_id.name"/></td>
                     <td>RfcEmisorCtaOrd</td>
-                    <td><t t-esc="RfcEmisor"/></td>
+                    <td>
+                      <t t-if="o.l10n_mx_edi_payment_method_id=='01'">
+                        <t t-esc="RfcEmisor"/>
+                      </t>
+                    </td>
                     <td>CertPago</td>
                     <td></td>
                  </tr>
@@ -309,7 +313,11 @@
                     <td>Moneda</td>
                     <td><t t-esc="enc['MonedaP']"/></td>
                     <td>NomBancoOrd</td>
-                    <td><t t-esc="NomBancoOrd"/></td>
+                    <td>
+                      <t t-if="o.l10n_mx_edi_payment_method_id=='01'">
+                        <t t-esc="NomBancoOrd"/>
+                      </t>
+                    </td>
                     <td>CadPago</td>
                     <td></td>
                  </tr>
@@ -317,7 +325,11 @@
                     <td>TipoCambio</td>
                     <td></td>
                     <td>CtaOrdenante</td>
-                    <td><t t-esc="CtaOrdenante"/></td>
+                    <td>
+                      <t t-if="o.l10n_mx_edi_payment_method_id=='01'">
+                        <t t-esc="CtaOrdenante"/>
+                      </t>
+                    </td>
                     <td>SelloPago</td>
                     <td></td>
                  </tr>
