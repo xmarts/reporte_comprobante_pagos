@@ -302,11 +302,11 @@
                     <td>RfcEmisorCtaOrd</td>
                     <td>
                       <t t-if="o.l10n_mx_edi_payment_method_id.code!='01'">
-                        <t t-esc="o.l10n_mx_edi_payment_method_id.code"/>
+                        <t t-esc="RfcEmisor"/>
                       </t>
                     </td>
                     <td>CertPago</td>
-                    <td>Prueba aaaaaaaaaa</td>
+                    <td></td>
                  </tr>
                    <tr>
 
